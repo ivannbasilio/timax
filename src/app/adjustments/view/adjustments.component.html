@@ -1,0 +1,153 @@
+<div class="w-3/4 m-auto">
+    <div class="grid grid-cols-12 gap-4">
+
+        <div class="col-span-full bg-white p-2 rounded-lg">
+            <div class="grid grid-cols-12">
+                <div class="col-span-8 inline-flex items-center">
+                    <span class="font-bold text-base text-gray-700 ml-2">
+                        Ajustes de Ponto
+                    </span>
+                </div>
+                <div class="col-span-4 text-right">
+                    <button type="button" (click)="showModal = true" class="text-white bg-blue-900 duration-300 hover:bg-blue-800 hover:duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-centermr-2 mb-2">
+                        <svg class="w-5 h- mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Criar um novo ajuste
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-full bg-white p-4 rounded-lg">
+                
+            <div class="overflow-x-auto relative">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-base font-bold text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="py-3 px-6">
+                                Enviado
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Ajuste
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Tipo
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Status
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Justificativa
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Aviso
+                            </th>
+                            <!-- <th scope="col" class="py-3 px-6">
+                                Cancelar
+                            </th> -->
+                        </tr>
+                    </thead>
+                    <tbody class="text-base">
+                        <ng-container *ngFor="let adjustment of (adjustments$ | async)">
+                            <tr class="bg-white dark:bg-gray-800 dark:border-gray-700 duration-300 hover:bg-orange-300 hover:transition-colors hover:duration-300">
+                                <th scope="row" class="py-4 px-6 font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ adjustment.created.toDate() | date:'dd/MM/yyyy' }}
+                                </th>
+                                <td class="py-4 px-6">
+                                    {{ adjustment.fix }}
+                                </td>
+                                <!-- <td class="py-4 px-6">
+                                    <span *ngIf="note.adjustmented; else elseAdjustmented" class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">Sim</span>
+                                    <ng-template #elseAdjustmented>
+                                        <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Não</span>
+                                    </ng-template>
+                                </td> -->
+                                <td class="py-4 px-6">
+                                    <span [ngSwitch]="adjustment.type" class="bg-blue-100 text-blue-900 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-900">
+                                        <span *ngSwitchCase="0">Ajuste</span>
+                                        <span *ngSwitchCase="1">Inclusão</span>
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6 text-center">
+                                    <ng-container [ngSwitch]="adjustment.status">
+                                        <span *ngSwitchCase="0" class="inline-flex items-center p-1 mr-2 text-sm font-semibold text-yellow-800 bg-yellow-100 rounded-full">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <span class="sr-only">Icon description</span>
+                                        </span>
+                                        <span *ngSwitchCase="1" class="inline-flex items-center p-1 mr-2 text-sm font-semibold text-green-800 bg-green-100 rounded-full">
+                                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                            <span class="sr-only">Icon description</span>
+                                        </span>
+                                        <span *ngSwitchCase="2" class="inline-flex items-center p-1 mr-2 text-sm font-semibold text-red-800 bg-red-100 rounded-full">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <span class="sr-only">Icon description</span>
+                                        </span>
+                                    </ng-container>
+                                </td>
+                                <td class="py-4 px-6">
+                                    {{ adjustment.justification }}
+                                </td>
+                                <td class="py-4 px-6">
+                                    {{ adjustment.notice }}
+                                </td>
+                                <!-- <td class="py-4 px-6 text-center">
+                                    <button type="button" *ngIf="adjustment.status == 0" class="text-white bg-red-800 hover:bg-red-700 hover:duration-300 duration-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center">
+                                        <svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        <span class="sr-only">Icon description</span>
+                                    </button>
+                                </td> -->
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+    
+        </div>
+
+    </div>
+    <div class="absolute left-0 right-0 top-0 bottom-0 bg-opacity-60 bg-slate-900" *ngIf="showModal">
+        <div class="absolute w-3/5 h-96 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-4">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col col-span-11 font-bold">
+                    Criando um novo ajuste
+                </div>
+                <div class="col col-span-1 text-right">
+                    <button type="button" (click)="showModal = false" class="text-slate-800 bg-gray-100 hover:bg-white  font-medium rounded-full text-sm p-1 text-center inline-flex items-center mr-2 dark:bg-blue-800 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <span class="sr-only">Icon description</span>
+                      </button>
+                </div>
+                <div class="col col-span-4 mt-2 font-bold text-orange-500">
+                    Data
+                </div>
+                <div class="col col-span-4 mt-2 font-bold text-orange-500">
+                    Horário
+                </div>
+                <div class="col col-span-4 mt-2 font-bold text-orange-500">
+                    Tipo
+                </div>
+                <div class="col col-span-4">
+                    <input [(ngModel)]="adjustment.date" type="date" id="appt" name="appt" min="09:00" max="18:00" required class="w-40 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="col col-span-4">
+                    <input [(ngModel)]="adjustment.fix" class="w-40 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="time" id="appt" name="appt" min="09:00" max="18:00" required>
+                </div>
+                <div class="col col-span-4">
+                    <select [(ngModel)]="adjustment.type" class="w-40 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option *ngFor="let type of types" [value]="type.id">{{ type.name }}</option> 
+                    </select>
+                </div>
+                <div class="col col-span-full mt-4 font-bold text-orange-500">
+                    Justificativa
+                </div>
+                <div class="col col-span-full">
+                    <textarea [(ngModel)]="adjustment.justification" rows="3" class="resize-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Seu texto"></textarea>
+                </div>
+                <div class="col col-span-full">
+                    <button type="button" (click)="createAdjustment()" class="text-white bg-blue-900 duration-300 hover:bg-blue-800 hover:duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-centermr-2 mb-2">
+                        Criar ajuste
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    

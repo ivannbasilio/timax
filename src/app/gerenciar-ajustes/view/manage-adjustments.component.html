@@ -1,0 +1,101 @@
+<div class="w-3/4 m-auto">
+    <div class="grid grid-cols-12 gap-4">
+
+        <div class="col-span-full bg-white p-2 rounded-lg">
+            <div class="grid grid-cols-12">
+                <div class="col-span-full inline-flex items-center">
+                    <span class="font-bold text-base text-gray-700 ml-2">
+                        Gerenciamento de Ajustes de Ponto <span class="text-gray-400">(Você está como {{ (profile$ | async)?.permissions[0] }})</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-full bg-white p-4 rounded-lg">
+                
+            <div class="overflow-x-auto relative">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-base font-bold text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="py-3 px-6">
+                                Enviado
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Ajuste
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Tipo
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Justificativa
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Usuário
+                            </th>
+                            <th scope="col" class="py-3 px-6">  
+                            </th>
+                            <th scope="col" class="py-3 px-6"> 
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-base">
+                        <ng-container *ngFor="let adjustment of (adjustments$ | async)">
+                            <tr class="bg-white dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="py-4 px-6 font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ adjustment.data.created.toDate() | date:'dd/MM/yyyy' }}
+                                </th>
+                                <td class="py-4 px-6">
+                                    {{ adjustment.data.fix }}
+                                </td>
+                                <!-- <td class="py-4 px-6">
+                                    <span *ngIf="note.adjustmented; else elseAdjustmented" class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">Sim</span>
+                                    <ng-template #elseAdjustmented>
+                                        <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Não</span>
+                                    </ng-template>
+                                </td> -->
+                                <td class="py-4 px-6">
+                                    <span [ngSwitch]="adjustment.data.type" class="bg-blue-100 text-blue-900 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-900">
+                                        <span *ngSwitchCase="0">Ajuste</span>
+                                        <span *ngSwitchCase="1">Inclusão</span>
+                                    </span>
+                                </td>
+                                <td class="py-4 px-6">
+                                    {{ adjustment.data.justification }}
+                                </td>
+                                <td class="py-4 px-6">
+                                    <!-- {{ adjustment.data.notice }} --> [Usuário aqui]
+                                </td>
+                                <!-- <td class="py-4 px-6 text-center">
+                                    <button type="button" *ngIf="adjustment.status == 0" class="text-white bg-red-800 hover:bg-red-700 hover:duration-300 duration-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center">
+                                        <svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        <span class="sr-only">Icon description</span>
+                                    </button>
+                                </td> -->
+                                <td>
+                                    <button 
+                                        type="button" 
+                                        class="py-2 px-3 text-xs rounded-lg font-medium text-center text-white bg-green-600 hover:bg-green-700 dark:bg-green-900 dark:hover:bg-green-700"
+                                        (click)="manageAdjustment({ accept: true, id: adjustment.id })">
+                                        Aceitar
+                                    </button>
+                                </td>
+                                <td>
+                                    <button 
+                                        type="button" 
+                                        class="py-2 px-3 text-xs rounded-lg font-medium text-center text-white bg-red-600 hover:bg-red-700 dark:bg-red-900 dark:hover:bg-red-700"
+                                        (click)="manageAdjustment({ accept: false, id: adjustment.id })">
+                                        Negar
+                                    </button>
+                                </td>
+                            </tr>
+                        
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+    
+        </div>
+
+    </div>
+</div>    
+

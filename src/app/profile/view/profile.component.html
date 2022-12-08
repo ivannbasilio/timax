@@ -1,0 +1,156 @@
+<div [ngClass]="{ 'w-3/4 m-auto': !isEditMode || !isAdminstratorMode}">
+    <div class="grid grid-cols-12 gap-4">
+
+        <div class="col-span-2 bg-white p-4 rounded-lg">
+            <span class="font-bold text-sm m-auto text-center text-gray-700">
+                <img class="rounded w-full h-auto" [src]="(profile$ | async)?.image" alt="Default avatar">
+            </span>
+        </div>
+    
+        <div class="col-span-10 bg-white p-4 rounded-lg">
+            <div class="grid grid-cols-12 gap-4">
+    
+                <div class="col-span-6">
+                    <span class="font-bold text-sm text-gray-700">
+                        Nome 
+                    </span>
+                    {{ (profile$ | async)?.name }}
+                </div>
+    
+                <div class="col-span-6">
+                    <span class="font-bold text-sm text-gray-700">
+                        Matrícula 
+                    </span>
+                    000{{ (profile$ | async)?.registration }}
+                </div>
+    
+                <div class="col-span-6">
+                    <span class="font-bold text-sm text-gray-700">
+                        CPF/CNPJ 
+                    </span>
+                    {{ (profile$ | async)?.nif }}
+                </div>
+    
+                <div class="col-span-6">
+                    <span class="font-bold text-sm text-gray-700">
+                        Cargo 
+                    </span>
+                    {{ (profile$ | async)?.role }}
+                </div>
+    
+                <div class="col-span-full">
+                    <span class="font-bold text-sm text-gray-700">
+                        Endereço 
+                    </span>
+                    {{ (profile$ | async)?.street }}, {{ (profile$ | async)?.number }} - 
+                    {{ (profile$ | async)?.district }} - {{ (profile$ | async)?.city }} / {{ (profile$ | async)?.state }} 
+                </div>
+    
+            </div>
+        </div>
+    
+        <div class="col-span-full bg-white p-4 rounded-lg">
+            <span class="font-bold text-base text-gray-700">
+                Apontamentos
+            </span>
+        </div>
+    
+        <div class="col-span-full bg-white p-4 rounded-lg">
+            
+            <div class="overflow-x-auto relative">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-base font-bold text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="py-3 px-6">
+                                Dia
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Data
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Ajustado
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Hora Extra
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-base">
+                        <ng-container *ngFor="let note of (timeNotes$ | async)">
+                            <tr class="bg-white dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="py-4 px-6 font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ getDayName(note.created.toDate()).toUpperCase() }}
+                                </th>
+                                <td class="py-4 px-6">
+                                    {{ note.created.toDate() | date:'dd/MM/yyyy'}}
+                                </td>
+                                <td class="py-4 px-6">
+                                    <span *ngIf="note.adjustmented; else elseAdjustmented" class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">Sim</span>
+                                    <ng-template #elseAdjustmented>
+                                        <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Não</span>
+                                    </ng-template>
+                                </td>
+                                <td class="py-4 px-6">
+                                    {{ note.overtime }}
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+    
+        </div>
+
+        <div class="col-span-full bg-white p-4 rounded-lg">
+            <span class="font-bold text-base text-gray-700">
+                Folha
+            </span>
+        </div>
+
+        <div class="col-span-full bg-white p-4 rounded-lg">
+            
+            <div class="overflow-x-auto relative">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-base font-bold text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="py-3 px-6">
+                                Período
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Pagamento
+                            </th>
+                            <th scope="col" class="py-3 px-6">
+                                Download
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-base">
+                        <ng-container *ngFor="let paycheck of (paychecks$ | async)">
+                            <tr class="bg-white dark:bg-gray-800 dark:border-gray-700">
+                                <th scope="row" class="py-4 px-6 font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ paycheck.start.toDate() | date:'dd/MM/yyyy' }} à {{ paycheck.end.toDate() | date:'dd/MM/yyyy' }}
+                                </th>
+                                <td class="py-4 px-6">
+                                    {{ paycheck.payment.toDate() | date:'dd/MM/yyyy'}}
+                                </td>
+                                <!-- <td class="py-4 px-6">
+                                    <span *ngIf="note.adjustmented; else elseAdjustmented" class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">Sim</span>
+                                    <ng-template #elseAdjustmented>
+                                        <span class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">Não</span>
+                                    </ng-template>
+                                </td> -->
+                                <td class="py-4 px-6">
+                                    <button type="button" (click)="download(paycheck.link)" class="py-2 px-3 text-xs rounded-lg font-medium text-center text-white bg-blue-900 hover:bg-blue-700 dark:bg-blue-900 dark:hover:bg-blue-700">
+                                        Baixar
+                                    </button>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+    
+        </div>
+
+    </div>
+</div>

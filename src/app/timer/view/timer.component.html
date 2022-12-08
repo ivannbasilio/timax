@@ -1,0 +1,183 @@
+<div class="w-4/5 m-auto">
+    <div class="grid grid-cols-12 gap-2 p-2">
+        <div class="col col-span-full bg-white rounded-lg p-4">
+
+            <div class="grid grid-cols-12 gap-4">
+                
+
+                <div class="col-span-full">
+                    <table class="w-full text-sm text-slate-700">
+                        <tr>
+                            <td class="col-span-6 font-bold">Colaborador</td>
+                            <td class="col-span-6 text-right">{{ (profile$ | async)?.name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-span-6 font-bold">Projeto</td>
+                            <td class="col-span-6 text-right">{{ (profile$ | async)?.project }}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-span-6 font-bold">Função</td>
+                            <td class="col-span-6 text-right">{{ (profile$ | async)?.occupation }}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-span-6 font-bold">Horário</td>
+                            <td class="col-span-6 text-right">{{ (profile$ | async)?.workTime }}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-span-6 font-bold">Modalidade</td>
+                            <td class="col-span-6 text-right">{{ (profile$ | async)?.type }}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="col-span-8 mt-4">
+                    <button type="button" (click)="markTimeNote()" class="w-full py-3 px-3 text-xs rounded-lg font-medium text-center text-white bg-blue-900 hover:bg-blue-700 dark:bg-blue-900 dark:hover:bg-blue-700">
+                        Registrar apontamento
+                    </button>
+                </div>
+
+                <div class="col-span-4 mt-4">
+                    <button type="button" onclick="alert('Em construção')" class="w-full py-3 px-3 text-xs rounded-lg font-medium text-center text-white bg-orange-500 hover:bg-orange-700 dark:bg-orange-900 dark:hover:bg-orange-700">
+                        Comprovante
+                    </button>
+                </div>
+           
+                <div class="col-span-full">
+                    
+                    <div class="overflow-x-auto relative">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="py-2 px-6 bg-gray-50 dark:bg-gray-800">
+                                        Dia
+                                    </th>
+                                    <th scope="col" class="py-2 px-4">
+                                        Data
+                                    </th>
+                                    <th scope="col" class="py-2 px-4  bg-gray-50 dark:bg-gray-800">
+                                        Entrada 1
+                                    </th>
+                                    <th scope="col" class="py-2 px-4">
+                                        Saída 1
+                                    </th>
+                                    <th scope="col" class="py-2 px-4 bg-gray-50 dark:bg-gray-800">
+                                        Entrada 2
+                                    </th>
+                                    <th scope="col" class="py-2 px-4">
+                                        Saída 2
+                                    </th>
+                                    <th scope="col" class="py-2 px-4">
+                                        Total diário
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let timeNote of (timeNotes$ | async)">
+                                    <tr class=" dark:border-gray-700 text-center">
+                                        <th scope="row" class="text-left py-4 px-6 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
+                                            {{ timeNote.dayName }}
+                                        </th>
+                                        <td class="py-4 px-6 text-left">
+                                            {{ timeNote.created?.toDate() | date: 'dd/MM/yyyy' }}
+                                        </td>
+                                        <td class="py-4 px-6 bg-gray-50 dark:bg-gray-800">
+                                            {{ timeNote.e1 }}
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            {{ timeNote.s1 }}
+                                        </td>
+                                        <td class="py-4 px-6 bg-gray-50 dark:bg-gray-800">
+                                            {{ timeNote.e2 }}
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            {{ timeNote.s2 ? timeNote.e2 : '-' }}
+                                        </td>
+                                        <td class="py-4 px-6 bg-gray-50 dark:bg-gray-800 font-bold">
+                                            {{ computeHours(timeNote) }}
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                            <tfoot>
+                                <tr class="text-center">
+                                    <td colspan="6" class="py-4 px-6 text-right font-bold">Total</td>
+                                    <td colspan="7" class="py-4 px-6 font-bold">
+                                        {{ computeTotal() }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <!-- <a href="#" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">Learn more <svg class="ml-2 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></a> -->
+        <!-- <div class="col col-span-4 p-4">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col col-span-full inline-block mt-6">
+                    <div class="text-center bg-white rounded-lg p-4 animate-pulse">
+                        <span class="font-bold text-slate-900 text-2xl">{{ rxTime | date: 'hh:mm:ss a' }}</span>
+                        <p>
+                            <span class="text-center inline-block font-normal text-slate-500 text-base">
+                            {{ getDayFormatted() }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col col-span-full bg-white rounded-lg p-4">
+sss
+                </div>
+            </div>
+        </div> -->
+
+        <div class="col col-span-full bg-white rounded-lg p-4 mt-4">
+            <div class="grid grid-cols-12 gap-4">
+                
+                <div class="col-span-8">
+                    <span class="font-bold text-slate-700">Atestados</span>
+                </div>
+
+                <div class="col-span-4 text-right">
+                    <button type="button" onclick="alert('Em construção')" class="text-white bg-blue-900 duration-300 hover:bg-blue-800 hover:duration-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-centermr-2 mb-2">
+                        <svg class="w-5 h- mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Novo atestado
+                    </button>
+                </div>
+
+                <div class="col-span-full mt-4">
+
+                    <div class="overflow-x-auto relative">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                                <tr>
+                                    <th class="py-2 px-3">Tipo</th>
+                                    <th class="py-2 px-3">Descrição</th>
+                                    <th class="py-2 px-3">Data</th>
+                                    <th class="py-2 px-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="mt-2">
+                                <tr>
+                                    <td class="py-2 px-3">CID A059</td>
+                                    <td class="py-2 px-3">Vômito, diarréia, náuseas e febre - Intoxicação alimentar bacteriana</td>
+                                    <td class="py-2 px-3">24/11/2022</td>
+                                    <td class="py-2 px-3">
+                                        <span class="inline-flex items-center p-1 mr-2 text-sm font-semibold text-green-800 bg-green-100 rounded-full">
+                                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                            <span class="sr-only">Icon description</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
